@@ -11,7 +11,7 @@
 <br>
 	  For the people who aren't familiar with natural language processing, you can begin by learning this:
 <br>
-		By default, if you make no changes to the config file and send a None as command, FPSW will create a connection in spanish that if you send to it a word like: <i>perras</i>, it wil return you the array: <i>[ "perras", "perro", "NCFP000", "1"]</i>. The first element will be the word you inputed, the second will be the root word without gender or number modifications, the third will be the EAGLES POS Tag of the word (in this case: Female Plural Noun) and the fourth is the ocurrence of that tag subject to context.
+		By default, if you make no changes to the config file and send a None as command, FPSW will create a connection in spanish that if you send to it a word like: <i>perras</i>, it wil return you the array: <i>[ "perras", "perras", "perro", "NCFP000", "1"]</i>. The first element will be the word you inputed, the second wil be the phonetic version, the third will be the root word without gender or number modifications, the fourth will be the EAGLES POS Tag of the word (in this case: Female Plural Noun) and the fifth is the ocurrence of that tag subject to context.
 <br>
     The phrase: <i>La función del ser humano es vivir, no existir. No voy a gastar mis días tratando de prolongarlos, voy a aprovechar mi tiempo.</i> will return an array like this:
 <pre>
