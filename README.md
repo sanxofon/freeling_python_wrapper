@@ -39,6 +39,12 @@ You can run it like this:
 </pre>
 That's quick!
 <br><br>
+<b>Dependencies</b>
+<br>
+1. Freeling 3.1/4dev - works both with windows (win7 tested) or linux (debian jessie tested) versions of the binary package.
+<br>
+2. Python 2.7
+<br><br>
 <b>Why?</b>
 <br>
 I wrote this because in fkn windows 7 the compiled analyzer.exe that comes with the binary version of the freeling 3.1 package doesen't keep the conection opened in server mode, so you have to load the dictionaries (a couple of seconds) for every query. That's a lot of time if you multipy by thousands of querys done by a simple script. For instance you could create a root word search by doing a fulltext copy of a text with all the words rooted, so the search for <i>perras</i> in an analyzed repository will return (may be as a second level rank value?) all <i>perro</i> related results. Neat!
