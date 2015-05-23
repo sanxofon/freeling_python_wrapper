@@ -60,5 +60,10 @@ wget -v -t 0 http://devel.cpl.upc.edu/freeling/downloads/33
 <br>
 I wrote this because in fkn windows 7 the compiled analyzer.exe that comes with the binary version of the freeling 3.1 package doesn't keep the conection open in server mode, so you have to load the dictionaries (a couple of seconds) for every query. That's a lot of time if you multipy by thousands of querys done by a simple script. For instance you could create a root word search by doing a fulltext copy of a text with all the words rooted, so the search for <i>perras</i> in an analyzed repository will return (may be as a second level rank value?) all <i>perro</i> related results. You could also do only so for nouns, adjectives and verbs. Neat!
 <br>
-I <i>analyzed</i> 30,000 descriptions of a repository objects in one day with this simple script and some simple php code. Most of the time was spent in making a good regex that cleans the input from unwanted non utf-8 and such characters but keeping as many as posible valid characters (even in russian) of the original string. That was a test and retest work. I am a dumb lazy person.<br><br>
+I <i>analyzed</i> 30,000 descriptions of a repository objects in one day with this simple script and some simple php code. Most of the time was spent in making a good regex that cleans the input from unwanted non utf-8 and such characters but keeping as many as posible valid characters (even in russian) of the original string. That was a test and retest work. I am a dumb lazy person.
+<br><br>
+<b>For testing prouporses only!</b>
+<br>
+If you wan't to run a freeling analyzer server for real production use you could use the java wrapper the comes in the freeling package and mount it as a webapp in tomcat or something like that. You should not use the linux analizer pre compiled executable in server mode. It's very unstable. But in your pc or temporarly you could use this! 
+<br><br>
 <i>This is free for all, send pull requests and bla, bla, bla...</i>
