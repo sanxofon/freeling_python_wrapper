@@ -41,9 +41,13 @@ That's quick!
 <br><br>
 <b>Dependencies</b>
 <br>
-1. Freeling 3.1/4dev - works both with windows (win7 tested) or linux (debian jessie tested) versions of the binary package.
+1. Freeling 3.1/4dev
+<br>
+ &nbsp; &nbsp; <i>Works both with windows (win7 tested) or linux (debian jessie tested) versions of the binary package.</i>
 <br>
 2. Python 2.7
+<br>
+ &nbsp; &nbsp; <i>Haven't tested in py3</i>
 <br><br>
 <b>Why?</b>
 <br>
