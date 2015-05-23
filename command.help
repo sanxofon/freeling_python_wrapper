@@ -1,0 +1,396 @@
+ >> Help
+      -h, --help, --help-cf
+  Prints to stdout a help screen with valid options and exits.
+      --help provides information about command line options.
+      --help-cf provides information about Configuration file options.
+  
+ >> Version number
+      -v, --version
+  Prints the version number of currently installed FreeLing library.
+  
+ >> Configuration file
+      -f <filename>
+  Specify Configuration file to use (default: analyzer.cfg).
+  
+ >> Server mode
+      --server (yes|y|on|no|n|off)
+  Activate server mode. Requires that option --port is also provided.
+  Default value is off.
+  
+ >> Server Port Number
+      -p <int>, --port <int>
+  Specify port where server will be listening for requests. This option must be specified if
+    server mode is active, and it is ignored if server mode is on.
+  
+ >> Maximum Number of Server Workers
+      -w <int>, --workers <int>
+  Specify maximum number of active workers that the server will launch. Each worker attends
+    a client, so this is the maximum number of clients that are simultaneously attended. This
+    option is ignored if server mode is on.
+  Default vaule is 5. Note that a high number of simultaneous workers will result in forking
+    that many processes, which may overload the CPU and memory of your machine resulting
+    in a system collapse.
+  When the maximum number of workers is reached, new incoming requests are queued until
+    a worker finishes.
+  
+ >> Maximum Size of Server Queue
+      -q <int>, --queue <int>
+  Specify maximum number of pending clients that the server socket can hold. This option is
+    ignored if server mode is on.
+  Pending clients are requests waiting for a worker to be available. They are queued in the
+    operating system socket queue.
+  80 CHAPTER 6. USING THE SAMPLE MAIN PROGRAM TO PROCESS CORPORA
+  Default value is 32. Note that the operating system has an internal limit for the socket queue
+    size (e.g. modern linux kernels set it to 128). If the given value is higher than the operating
+    system limit, it will be ignored.
+  When the pending queue is full, new incoming requests get a connection error.
+  
+ >> Trace Level
+      -l <int>, --tlevel <int>
+  Set the trace level (0 = no trace, higher values = more trace), for debugging purposes.
+  This will work only if the library was compiled with tracing information, using ./configure
+      --enable-traces. Note that the code with tracing information is slower than the code
+    compiled without it, even when traces are not active.
+  
+ >> Trace Module
+      -m <mask>, --tmod <mask>
+  Specify modules to trace. Each module is identified with an hexadecimal ag. All ags may
+    be OR-ed to specificy the set of modules to be traced.
+  Valid masks are defined in file src/include/freeling/morfo/traces.h, and are the following:
+  
+      Module                       Mask
+      ---------------------------------------
+      Splitter                     0x00000001
+      Tokenizer                    0x00000002
+      Morphological analyzer       0x00000004
+      Options management           0x00000008
+      Number detection             0x00000010
+      Date identification          0x00000020
+      Punctuation detection        0x00000040
+      Dictionary search            0x00000080
+      Affixation rules             0x00000100
+      Multiword detection          0x00000200
+      Named entity detection       0x00000400
+      Probability assignment       0x00000800
+      Quantities detection         0x00001000
+      Named entity classification  0x00002000
+      Automata (abstract)          0x00004000
+      Sense annotation             0x00010000
+      Chart parser                 0x00020000
+      Parser grammar               0x00040000
+      Dependency parser            0x00080000
+      Correference resolution      0x00100000
+      Utilities                    0x00200000
+      Word sense disambiguation    0x00400000
+      Ortographic correction       0x00800000
+      Database storage             0x01000000
+      Feature extraction           0x02000000
+      Language identifier          0x04000000
+      Omlet                        0x08000000
+      Phonetics                    0x10000000
+  
+ >> Language of input text
+      --lang <language>
+  6.4. CONFIGURATION FILE AND COMMAND LINE OPTIONS 81
+  Code for language of input text. Though it is not required, the convention is to use two-letter
+  ISO codes (as: Asturian, es: Spanish, ca: Catalan, en: English, cy: Welsh, it: Italian, gl:
+  Galician, pt: Portuguese, ru: Russian, old-es: old Spanish).
+  Other languages may be added to the library. See chapter 7 for details.
+  
+ >> Locale
+      --locale <locale>
+  Locale to be used to interpret both input text and data files. Usually, the value will match
+    the locale of the Lang option (e.g. es_ES.utf8 for spanish, ca_ES.utf8 for Catalan, etc.).
+  The values default (stands for en_US.utf8) and system (stands for currently active system
+    locale) may also be used.
+  
+ >> Splitter Buner Flushing
+      --flush, --noflush
+  When this option is inactive (most usual choice) sentence splitter buners lines until a sentence
+    marker is found. Then, it outputs a complete sentence.
+  When this option is active, the splitter never buners any token, and considers each newline
+    as a sentence end, thus processing each line as an independent sentence.
+  
+ >> Input Format
+      --inpf <string>
+  Format of input data (plain, token, splitted, morfo, tagged, sense).
+  { plain: plain text.
+  { token: tokenized text (one token per line).
+  { splitted : tokenized and sentence-splitted text (one token per line, sentences separated
+    with one blank line).
+  { morfo: tokenized, sentence-splitted, and morphologically analyzed text. One token per
+    line, sentences separated with one blank line.
+  Each line has the format: word (lemma tag prob)+
+  { tagged: tokenized, sentence-splitted, morphologically analyzed, and PoS-tagged text.
+  One token per line, sentences separated with one blank line.
+  Each line has the format: word lemma tag.
+  { sense: tokenized, sentence-splitted, morphologically analyzed, PoS-tagged text, and
+    sense-annotated. One token per line, sentences separated with one blank line.
+  Each line has the format: word (lemma tag prob sense1:...:senseN)+
+  
+ >> Output Format
+      --outf <string>
+  Format of output data (token, splitted, morfo, tagged, shallow, parsed, dep).
+  { token: tokenized text (one token per line).
+  { splitted : tokenized and sentence-splitted text (one token per line, sentences separated
+    with one blank line).
+  82 CHAPTER 6. USING THE SAMPLE MAIN PROGRAM TO PROCESS CORPORA
+  { morfo: tokenized, sentence-splitted, and morphologically analyzed text. One token per
+    line, sentences separated with one blank line.
+  Each line has the format:
+    word (lemma tag prob)+
+    or (if sense tagging has been activated):
+    word (lemma tag prob sense1:...:senseN)+
+  { tagged: tokenized, sentence-splitted, morphologically analyzed, and PoS-tagged text.
+  One token per line, sentences separated with one blank line.
+  Each line has the format: word lemma tag prob
+    or, if sense tagging has been activated: word lemma tag prob sense1:...:senseN
+  { shallow: tokenized, sentence-splitted, morphologically analyzed, PoS-tagged, optionally
+    sense{annotated, and shallow-parsed text, as output by the chart_parser module.
+  { parsed: tokenized, sentence-splitted, morphologically analyzed, PoS-tagged, optionally
+    sense{annotated, and full-parsed text, as output by the first stage (tree completion) of
+    the dependency parser.
+  { dep: tokenized, sentence-splitted, morphologically analyzed, PoS-tagged, optionally
+    sense{annotated, and dependency-parsed text, as output by the second stage (transformation
+    to dependencies and function labelling) of the dependency parser.
+  
+ >> Produce training output format
+      --train
+  When this option (only available at command line) is specified, OutputFormat is forced to
+    tagged and results are printed in the format:
+    word lemma tag # lemma1 tag1 lemma2 tag2 ...
+    that is, one word per line, with the selected lemma and tag as fields 2 and 3, a separator (#)
+    and a list of all possible pairs lemma-tag for the word (including the selected one).
+  This format is expected by the training scripts. Thus, this option can be used to annotate
+    a corpus, correct the output manually, and use it to retrain the taggers with the
+    script src/utilities/train-tagger/bin/TRAIN.sh provided in FreeLing package. See
+    src/utilities/train-tagger/README for details about how to use it.
+  
+ >> Language Identification Configuration File
+      -I <filename>, --fidn <filename>
+  Configuration file for language identifier. See section 3.1 for details.
+  
+ >> Tokenizer File
+      --abrev <filename>
+  File of tokenization rules. See section 3.2 for details.
+  
+ >> Splitter File
+      --fsplit <filename>
+  File of splitter options rules. See section 3.3 for details.
+  6.4. CONFIGURATION FILE AND COMMAND LINE OPTIONS 83
+  
+ >> Affix Analysis
+      --afx, --noafx
+  Whether to perform affix analysis on unknown words. Affix analysis applies a set of affixation
+    rules to the word to check whether it is a derived form of a known word.
+  
+ >> Affixation Rules File
+      -S <filename>, --fafx <filename>
+  Affix rules file. See section 3.9.2 for details.
+  
+ >> User Map
+      --usr, --nousr
+  Whether to apply or not a file of customized word-tag mappings.
+  
+ >> User Map File
+      -M <filename>, --fmap <filename>
+  User Map file to be used. See section 3.7 for details.
+  
+ >> Multiword Detection
+      --loc, --noloc
+  Whether to perform multiword detection. This option requires that a multiword file is
+    provided.
+  
+ >> Multiword File
+      -L <filename>, --floc <filename>
+  Multiword definition file. See section 3.10 for details.
+  
+ >> Number Detection
+      --numb, --nonumb
+  Whether to perform nummerical expression detection. Deactivating this feature will anect
+    the behaviour of date/time and ratio/currency detection modules.
+  
+ >> Decimal Point
+      --dec <string>
+  Specify decimal point character for the number detection module (for instance, in English
+    is a dot, but in Spanish is a comma).
+  
+ >> Thousand Point
+      --thou <string>
+  Specify thousand point character for the number detection module (for instance, in English
+    is a comma, but in Spanish is a dot).
+  84 CHAPTER 6. USING THE SAMPLE MAIN PROGRAM TO PROCESS CORPORA
+  
+ >> Punctuation Detection
+      --punt, --nopunt
+  Whether to assign PoS tag to punctuation signs.
+  
+ >> Punctuation Detection File
+      -F <filename>, --fpunct <filename>
+  Punctuation symbols file. See section 3.6 for details.
+  
+ >> Date Detection
+      --date, --nodate
+  Whether to perform date and time expression detection.
+  
+ >> Quantities Detection
+      --quant, --noquant
+  Whether to perform currency amounts, physical magnitudes, and ratio detection.
+  
+ >> Quantity Recognition File
+      -Q <filename>, --fqty <filename>
+  Quantitiy recognition Configuration file. See section 3.12 for details.
+  
+ >> Dictionary Search
+      --dict, --nodict
+  Whether to search word forms in dictionary. Deactivating this feature also deactivates
+  AffixAnalysis option.
+  
+ >> Dictionary File
+      -D <filename>, --fdict <filename>
+  Dictionary database. See section 3.9 and chapter 7 for details.
+  
+ >> Probability Assignment
+      --prob, --noprob
+  Whether to compute a lexical probability for each tag of each word. Deactivating this feature
+    will anect the behaviour of the PoS tagger.
+  
+ >> Lexical Probabilities File
+      -P <filename>, --fprob <filename>
+  Lexical probabilities file. The probabilities in this file are used to compute the most likely
+    tag for a word, as well to estimate the likely tags for unknown words. See section 3.13 for
+    details.
+  6.4. CONFIGURATION FILE AND COMMAND LINE OPTIONS 85
+  
+ >> Unknown Words Probability Threshold.
+      -e <float>, --thres <float>
+  Threshold that must be reached by the probability of a tag given the suffix of an unknown
+    word in order to be included in the list of possible tags for that word. Default is zero (all
+    tags are included in the list). A non{zero value (e.g. 0.0001, 0.001) is recommended.
+  
+ >> Named Entity Recognition
+      --ner [bio|basic|none]
+  Whether to perform NE recognition and which recognizer to use: \bio" for AdaBoost based
+  NER, \basic" for a simple heuristic NE recognizer and \none" to perform no NE recognition
+  . Deactivating this feature will cause the NE Classification module to have no enect.
+  
+ >> Named Entity Recognition
+      --ner, --noner
+  Whether to perform NE recognition.
+  
+ >> Named Entity Recognizer File
+      -N <filename>, --fnp <filename>
+  Configuration data file for NE recognizer.
+  See section 3.11 for details.
+  
+ >> Named Entity Classification
+      --nec, --nonec
+  Whether to perform NE classification.
+  
+ >> Named Entity Classifier File
+      --fnec <filename>
+  Configuration file for Named Entity Classifier module
+  See section 3.19 for details.
+  
+ >> Phonetic Encoding
+      --phon, --nophon
+  Whether to add phonetic transcription to each word.
+  
+ >> Phonetic Encoder File
+      --fphon <filename>
+  Configuration file for phonetic encoding module
+  See section 3.18 for details.
+  
+ >> Sense Annotation
+      -s <string>, --sense <string>
+  Kind of sense annotation to perform
+  86 CHAPTER 6. USING THE SAMPLE MAIN PROGRAM TO PROCESS CORPORA
+  { no, none: Deactivate sense annotation.
+  { all: annotate with all possible senses in sense dictionary.
+  { mfs: annotate with most frequent sense.
+  { ukb: annotate all senses, ranked by UKB algorithm.
+  Whether to perform sense anotation.
+  If active, the PoS tag selected by the tagger for each word is enriched with a list of all its
+    possible WN synsets. The sense repository used depends on the options \Sense Annotation
+  Configuration File" and \UKB Word Sense Disambiguator Configuration File" described
+    below.
+  
+ >> Sense Annotation Configuration File
+      -W <filename>, --fsense <filename>
+  Word sense annotator Configuration file. See section 3.15 for details.
+  
+ >> UKB Word Sense Disambiguator Configuration File
+      -U <filename>, --fukb <filename>
+  UKB Configuration file. See section 3.16 for details.
+  
+ >> Tagger algorithm
+      -t <string>, --tag <string>
+  Algorithm to use for PoS tagging
+  { hmm: Hidden Markov Model tagger, based on [Bra00].
+  { relax: Relaxation Labelling tagger, based on [Pad98].
+  
+ >> HMM Tagger configuration File
+      -H <filename>, --hmm <filename>
+  Parameters file for HMM tagger. See section 3.17.1 for details.
+  
+ >> Relaxation labelling tagger constraints file
+      -R <filename>, --rlx <filename>
+  File containing the constraints to apply to solve the PoS tagging. See section 3.17.2 for
+    details.
+  
+ >> Relaxation labelling tagger iteration limit
+      -i <int>, --iter <int>
+  Maximum numbers of iterations to perform in case relaxation does not converge.
+  
+ >> Relaxation labelling tagger scale factor
+      -r <float>, --sf <float>
+  Scale factor to normalize supports inside RL algorithm. It is comparable to the step lenght
+    in a hill-climbing algorithm: The larger scale factor, the smaller step.
+  6.4. CONFIGURATION FILE AND COMMAND LINE OPTIONS 87
+  
+ >> Relaxation labelling tagger epsilon value
+      --eps <float>
+  Real value used to determine when a relaxation labelling iteration has produced no significant
+    changes. The algorithm stops when no weight has changed above the specified epsilon.
+  
+ >> Retokenize contractions in dictionary
+      --rtkcon, --nortkcon
+  Specifies whether the dictionary must retokenize contractions when found, or leave the decision
+    to the TaggerRetokenize option.
+  Note that if this option is active, contractions will be retokenized even if the TaggerRetokenize
+    option is not active. If this option is not active, contractions will be retokenized depending
+    on the value of the TaggerRetokenize option.
+  
+ >> Retokenize after tagging
+      --rtk, --nortk
+  Determine whether the tagger must perform retokenization after the appropriate analysis
+    has been selected for each word. This is closely related to affix analysis and PoS taggers, see
+    sections 3.9.2 and 3.17 for details.
+  
+ >> Force the selection of one unique tag
+      --force <string>
+  Determine whether the tagger must be forced to (probably randomly) make a unique choice
+    and when.
+  { none: Do not force the tagger, allow ambiguous output.
+  { tagger: Force the tagger to choose before retokenization (i.e. if retokenization introduces
+    any ambiguity, it will be present in the final output).
+  { retok: Force the tagger to choose after retokenization (no remaining ambiguity)
+  See 3.17 for more information.
+  
+ >> Chart Parser Grammar File
+      -G <filename>, --grammar <filename>
+  This file contains a CFG grammar for the chart parser, and some directives to control which
+    chart edges are selected to build the final tree. See section 3.20.1 for details.
+  
+ >> Dependency Parser Rule File
+      -T <filename>, --txala <filename>
+  Rules to be used to perform dependency analysis. See section 3.21.1 for details.
+  
+ >> Coreference Resolution
+      --coref, --nocoref
+  Whether to perform coreference resolution.
+  88 CHAPTER 6. USING THE SAMPLE MAIN PROGRAM TO PROCESS CORPORA
+  
+ >> Named Entity Classifier File
+      -C <filename>, --fcorf <filename>
+  Configuration file for coreference resolution module.
