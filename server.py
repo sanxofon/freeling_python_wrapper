@@ -37,8 +37,11 @@ class GetHandler(BaseHTTPRequestHandler):
         else:
             if iniciado == True:
                 print "  >> Analizar:",message
-                process,salida,s = analyzer.sendLineToProcess([message.encode('utf-8')],process,[],-1)
-                #salidax = salida[0]
+                salida = []
+                s=-1
+                for m in message.split(". "):
+                    process,salida,s = analyzer.sendLineToProcess([message.encode('utf-8')],process,salida,s)
+                """
                 if len(salida)>1:
                     if len(salida[1])==1:
                         salidax = salida
@@ -50,6 +53,8 @@ class GetHandler(BaseHTTPRequestHandler):
                     else:
                         salidax = salida[0][0]
                 print "  >> Salida: ",salidax
+                """
+                salidax = salida
                 salidax = json.dumps( salidax )
                 """
                 salidax = []

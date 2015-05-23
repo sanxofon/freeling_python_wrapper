@@ -13,25 +13,46 @@
 <br>
 		By default, if you make no changes to the config file and send a None as command, FPSW will create a connection in spanish that if you send to it a word like: <i>perras</i>, it wil return you the array: <i>[ "perras", "perro", "NCFP000", "1"]</i>. The first element will be the word you inputed, the second will be the root word without gender or number modifications, the third will be the EAGLES POS Tag of the word (in this case: Female Plural Noun) and the fourth is the ocurrence of that tag subject to context.
 <br>
-    The phrase: <i>Las perras que ladran a la luna están de vacaciones.</i> will return an array like this:
+    The phrase: <i>La función del ser humano es vivir, no existir. No voy a gastar mis días tratando de prolongarlos, voy a aprovechar mi tiempo.</i> will return an array like this:
 <pre>
 [
-	["Las", "el", "DA0FP0", "0.970954"],
-	["perras", "perro", "NCFP000", "1"],
-	["que", "que", "CS", "0.437483"],
-	["ladran", "ladrar", "VMIP3P0", "1"],
-	["a", "a", "SPS00", "0.996023"],
-	["la", "el", "DA0FS0", "0.972269"],
-	["luna", "luna", "NCFS000", "1"],
-	["están", "estar", "VAIP3P0", "1"],
-	["de", "de", "SPS00", "0.999984"],
-	["vacaciones", "vacaciones", "NCFP000", "0.5"],
-	[".", ".", "Fp", "1"]
+  [
+    ["La","la","el","DA0FS0","0.972269"],
+    ["función","funTjon","función","NCFS000","1"],
+    ["de","de","de","SPS00","1"],
+    ["el","el","el","DA0MS0","1"],
+    ["ser","ser","ser","VSN0000","0.940705"],
+    ["humano","umano","humano","AQ0MS0","0.989071"],
+    ["es","es","ser","VSIP3S0","1"],
+    ["vivir","bibir","vivir","VMN0000","0.995495"],
+    [",",",",",","Fc","1"],
+    ["no","no","no","RN","0.998134"],
+    ["existir","etSistir","existir","VMN0000","1"],
+    [".",".",".","Fp","1"]
+  ],
+  [
+    ["No","no","no","RN","0.998134"],
+    ["voy","boj","ir","VMIP1S0","1"],
+    ["a","a","a","SPS00","0.996023"],
+    ["gastar","gastar","gastar","VMN0000","1"],
+    ["mis","mis","mi","DP1CPS","0.995868"],
+    ["días","djas","día","NCMP000","1"],
+    ["tratando","tratando","tratar","VMG0000","1"],
+    ["de","de","de","SPS00","0.999984"],
+    ["prolongarlos","prolongarlos","prolongar+lo","VMN0000+PP3MPA00","1"],
+    [",",",",",","Fc","1"],
+    ["voy","boj","ir","VMIP1S0","1"],
+    ["a","a","a","SPS00","0.996023"],
+    ["aprovechar","aprobetSar","aprovechar","VMN0000","1"],
+    ["mi","mi","mi","DP1CSS","0.999101"],
+    ["tiempo","tjempo","tiempo","NCMS000","1"],
+    [".",".",".","Fp","1"]
+  ]
 ]
 </pre>
 <b>2. server.py - Quick Server (QS)</b>
 <br>
-This will make a quick BaseHTTPServer in <i>localhost:8000</i> that if recieves <i>?q=Las perras que ladran a la luna están de vacaciones.</i> it will give you that array mentioned before as a JSON.
+This will make a quick BaseHTTPServer in <i>localhost</i> at port <i>8000</i>. You can browse then to <i>http://localhost:8000/?q=La función del ser humano es vivir, no existir. No voy a gastar mis días tratando de prolongarlos, voy a aprovechar mi tiempo.</i> and you will get that array mentioned before as a JSON.
 <br>
 You can run it like this:
 <pre>
