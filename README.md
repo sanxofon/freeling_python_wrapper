@@ -51,7 +51,7 @@ That's quick!
 <br><br>
 <b>Why?</b>
 <br>
-I wrote this because in fkn windows 7 the compiled analyzer.exe that comes with the binary version of the freeling 3.1 package doesen't keep the conection opened in server mode, so you have to load the dictionaries (a couple of seconds) for every query. That's a lot of time if you multipy by thousands of querys done by a simple script. For instance you could create a root word search by doing a fulltext copy of a text with all the words rooted, so the search for <i>perras</i> in an analyzed repository will return (may be as a second level rank value?) all <i>perro</i> related results. Neat!
+I wrote this because in fkn windows 7 the compiled analyzer.exe that comes with the binary version of the freeling 3.1 package doesn't keep the conection open in server mode, so you have to load the dictionaries (a couple of seconds) for every query. That's a lot of time if you multipy by thousands of querys done by a simple script. For instance you could create a root word search by doing a fulltext copy of a text with all the words rooted, so the search for <i>perras</i> in an analyzed repository will return (may be as a second level rank value?) all <i>perro</i> related results. Neat!
 <br>
 I <i>analyzed</i> 30,000 descriptions of a repository objects in one day with this simple script and some simple php code. Most of the time was spent in making a good regex that cleans the input from unwanted non utf-8 and such characters but keeping as many as posible valid characters (even in russian) of the original string. That was a test and retest work. I am a dumb lazy person.<br><br>
 <i>This is free for all and bla, bla, bla...</i>
