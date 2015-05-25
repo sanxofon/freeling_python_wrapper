@@ -5,11 +5,55 @@ from BaseHTTPServer import BaseHTTPRequestHandler
 import urlparse, urllib, json, time
 import analyzer
 import pydoc #paged output
-host_port = ('localhost', 8000)
 iniciado = True
 process = None
 salida = []
 s = -1
+
+##Parse arguments
+import sys
+
+def getargs(argv):
+    ihost=''
+    iport = ''
+    mode=None
+    doit = False
+    for i,arg in enumerate(argv):
+        if arg == '-a':
+            print u'python server.py -h <host> -p <port> -m <mode>'
+            print u'Modes: tagged, plain, token, splitted, morfo, sense, dep'
+            sys.exit()
+        elif arg == "-x":
+            doit = True
+        else:
+            try:
+                narg = argv[i+1]
+            except:
+                break
+                pass
+            if arg == "-h":
+                ihost = narg
+            elif arg == "-p":
+                iport = narg
+            elif arg == "-m":
+                mode = narg
+
+    try:
+        ihost = ishost.strip()
+    except:
+        ihost='localhost'
+        pass
+    #iport = raw_input("Port (8000):")
+    try:
+        iport = int(iport.strip())
+    except:
+        iport=8000
+        pass
+    modes = ['plain', 'token', 'splitted', 'morfo', 'tagged', 'sense', 'dep']
+    if mode not in modes:
+        mode=None
+    return ihost,iport,mode,doit
+
 class GetHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         global iniciado, process, salida, s
@@ -39,8 +83,10 @@ class GetHandler(BaseHTTPRequestHandler):
                 print "  >> Analizar:",message
                 salida = []
                 s=-1
-                for m in message.split(". "):
-                    process,salida,s = analyzer.sendLineToProcess([message.encode('utf-8')],process,salida,s)
+                messageu = message.encode('utf-8').split(". ")
+                #for m in messageu.split(". "):
+                    #print m,salida,s,process
+                process,salida,s = analyzer.sendLineToProcess(messageu,process,salida,s)
                 """
                 if len(salida)>1:
                     if len(salida[1])==1:
@@ -78,16 +124,39 @@ class GetHandler(BaseHTTPRequestHandler):
         return
 
 if __name__ == '__main__':
+    ihost,iport,mode,doit = getargs(sys.argv[1:])
     from BaseHTTPServer import HTTPServer
     print "------------------------------------------------------------------------------"
-    print u"  >> Iniciando conexión con analyzer."
+    print "------------------------Freeling Analyzer Python Server-----------------------"
+    #ihost = raw_input("Host (localhost):").strip()
+    try:
+        ihost=ihost.strip()
+    except:
+        ihost='localhost'
+        pass
+    #iport = raw_input("Port (8000):")
+    try:
+        iport = int(iport)
+    except:
+        iport=8000
+        pass
+    host_port = (ihost, iport)
+    modes = ['plain', 'token', 'splitted', 'morfo', 'tagged', 'sense', 'dep']
+    if mode not in modes:
+        mode=None
+
+    print u"  >> Iniciando conexión con analyzer en modo:",mode
     print u"  >> Ingrese un comando de ejecución del tipo:"
     print u"  >>     analyzer.exe changapoeta -f analyzer.cfg"
+
     server = HTTPServer(host_port, GetHandler)
     do=True
     while do:
         print('-------------------------------------------')
-        prog = raw_input("Comando analyzer:").strip();
+        if doit:
+            prog=""
+        else:
+            prog = raw_input("Comando analyzer:").strip();
         if prog=="":
             #comando default
             prog=None
@@ -103,11 +172,11 @@ if __name__ == '__main__':
             do=False
 
     try:
-        process,salida,s = analyzer.connectToFreeling(None)
+        process,salida,s = analyzer.connectToFreeling(None,mode)
     except Exception, e:
         raise
     print('-------------------------------------------')
-    print u'  >> Iniciando servidor en http://localhost:8000. Use <Ctrl-C> para detener.'
+    print u'  >> Iniciando servidor en http://'+":".join([str(x) for x in host_port])+u'. Use <Ctrl-C> para detener.'
     print u'  >> Fecha de inicio:',time.strftime("%Y-%m-%d %H:%M:%S")
     print u'  >> Envíe la variable GET "q" con una frase que desee analizar.'
     print u'  >> Ejemplo:'

@@ -56,10 +56,15 @@ This will make a quick BaseHTTPServer in <i>localhost</i> at port <i>8000</i>. Y
 <br>
 You can run it like this:
 <pre>
->> python server.py
+&#62;&#62; python server.py
 </pre>
 That's quick!
-<br><br>
+<br>
+You could set the host name and port number like this:
+<pre>
+&#62;&#62; python server.py -h localhost -p 8000
+</pre>
+<br>
 <b>Dependencies</b>
 <br>
 1. Freeling 3.1/4dev
@@ -74,7 +79,7 @@ That's quick!
 <br>
 If you have python installed and you download freeling 3.1 to c:\freeling31 folder, this script will run without much modification, but the freeling package is a big and complicated download. Use curl, wget or something to try to download it until it succeeds. You could use something like this to download the windows x64 binary package (it will try many time until it succeeds, i'm afraid):
 <pre>
-wget -v -t 0 http://devel.cpl.upc.edu/freeling/downloads/33
+&#62;&#62; wget -v -t 0 http://devel.cpl.upc.edu/freeling/downloads/33
 </pre>
 <br>
 <b>Why?</b>

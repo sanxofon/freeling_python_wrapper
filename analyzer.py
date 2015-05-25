@@ -7,10 +7,17 @@ pp = pprint.PrettyPrinter(indent=4)
 
 # <codecell>
 
-def connectToFreeling(prog=None,out=False):
+def connectToFreeling(prog=None,mode=None,out=False):
     if prog is None:
         #You should change ../analyzer.exe to whatever the path is to your freeling installation
-        prog = ['c:\\freeling31\\bin\\analyzer.exe', 'changapoeta', '-f', 'analyzer.cfg']
+        #--inpf [plain, token, splitted, morfo, tagged, sense,dep]
+        modes = ['plain', 'token', 'splitted', 'morfo', 'tagged', 'sense', 'dep']
+        if mode not in modes:
+            mode = None
+        if mode is None:
+            prog = ['c:\\freeling31\\bin\\analyzer.exe', 'changapoeta', '-f', 'analyzer.cfg']
+        else:
+            prog = ['c:\\freeling31\\bin\\analyzer.exe', '-inpf', mode, 'changapoeta', '-f', 'analyzer.cfg']
         print "Default command:"," ".join(prog)
     if out:
         print("Iniciando conexión")
@@ -76,7 +83,7 @@ print('-------------------------------------------')
 print("Iniciando Test 1")
 print('-------------------------------------------')
 # Connect
-process,salida,s = connectToFreeling(None,True)
+process,salida,s = connectToFreeling(None,None,True)
 if process==False:
 	print "Error iniciando conexión"
 else:
