@@ -10,9 +10,10 @@ iniciado = True
 process = None
 salida = []
 s = -1
-
+cuantos = 0
 ##Parse arguments
 import sys
+stdout_encoding = sys.stdout.encoding
 
 def getargs(argv):
     ihost=''
@@ -59,7 +60,7 @@ class GetNPostHandler(BaseHTTPRequestHandler):
 #class PostHandler(BaseHTTPRequestHandler):
     
     def do_POST(self):
-        global iniciado, process, salida, s
+        global iniciado, process, salida, s, cuantos
         # Parse the form data posted
         form = cgi.FieldStorage(
             fp=self.rfile, 
@@ -87,12 +88,14 @@ class GetNPostHandler(BaseHTTPRequestHandler):
                 self.wfile.write('\tUploaded %s as "%s" (%d bytes)\n' % \
                         (field, field_item.filename, file_len))
             else:
-                cadena = str(form[field].value).decode('utf8').strip()
+                cadena = str(form[field].value).decode('utf-8').strip() #decode early
                 if len(cadena)>0:
                     # Se recibió una cadena de texto
                     salida = []
                     s=-1
-                    message = cadena.encode('utf-8').split(". ")
+                    cuantos+=1
+                    print " >> ",cuantos,":", cadena[0:50].encode(stdout_encoding)+"..." #encode late (print)
+                    message = cadena.split(". ") #send decoded between python
                     #for m in messageu.split(". "):
                         #print m,salida,s,process
                     process,salida,s = analyzer.sendLineToProcess(message,process,salida,s)

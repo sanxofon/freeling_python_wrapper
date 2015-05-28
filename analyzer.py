@@ -41,7 +41,7 @@ def sendLineToProcess(command,process,salida,s,out=False):
         s+=1
         salida.append([])
         c = c.strip()
-        process.stdin.write(c)
+        process.stdin.write(c.encode('utf-8'))
         if c[-1:]=='.':
         	removeLast = False
         	process.stdin.write('\r\n')
