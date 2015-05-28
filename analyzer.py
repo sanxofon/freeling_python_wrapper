@@ -41,7 +41,7 @@ def sendLineToProcess(command,process,salida,s,out=False):
         s+=1
         salida.append([])
         c = c.strip()
-        process.stdin.write(c.encode('utf-8'))
+        process.stdin.write(c.encode('utf-8')) #encode late
         if c[-1:]=='.':
         	removeLast = False
         	process.stdin.write('\r\n')
@@ -57,7 +57,8 @@ def sendLineToProcess(command,process,salida,s,out=False):
             psout =  psout.strip()
             #if psout=='. . Fp 1' and eliminarPunto:
             #	continue
-            salida[s].append(psout.split(" ")[2])
+            pso = psout.split(" ")
+            salida[s].append(pso[2]+"_"+pso[3])
         if out:
             pp.pprint(salida[s])
         if removeLast:
