@@ -57,7 +57,7 @@ def sendLineToProcess(command,process,salida,s,out=False):
             psout =  psout.strip()
             #if psout=='. . Fp 1' and eliminarPunto:
             #	continue
-            salida[s].append(psout.split(" "))
+            salida[s].append(psout.split(" ")[2])
         if out:
             pp.pprint(salida[s])
         if removeLast:

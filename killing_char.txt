@@ -1,0 +1,3 @@
+The killing character: "­"
+Mata el php si es insertado en el lugar correcto pero no se ve en sublime (win7 tested) con la letra default.
+-invisible en la barra de búsqueda del navegador (firefox v.38 tested)

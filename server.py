@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from BaseHTTPServer import BaseHTTPRequestHandler
+import cgi
 import urlparse, urllib, json, time
 import analyzer
 import pydoc #paged output
@@ -54,9 +55,61 @@ def getargs(argv):
         mode=None
     return ihost,iport,mode,doit
 
-class GetHandler(BaseHTTPRequestHandler):
+class GetNPostHandler(BaseHTTPRequestHandler):
+#class PostHandler(BaseHTTPRequestHandler):
+    
+    def do_POST(self):
+        global iniciado, process, salida, s
+        # Parse the form data posted
+        form = cgi.FieldStorage(
+            fp=self.rfile, 
+            headers=self.headers,
+            environ={'REQUEST_METHOD':'POST',
+                     'CONTENT_TYPE':self.headers['Content-Type'],
+                     })
+        # Begin the response
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.end_headers()
+        #self.wfile.write('Client: %s\n' % str(self.client_address))
+        #self.wfile.write('User-agent: %s\n' % str(self.headers['user-agent']))
+        #self.wfile.write('Path: %s\n' % self.path)
+        #self.wfile.write('Form data:\n')
+
+        # Echo back information about what was posted in the form
+        for field in form.keys():
+            field_item = form[field]
+            if field_item.filename:
+                # Se recibió un archivo de texto
+                file_data = field_item.file.read()
+                file_len = len(file_data)
+                del file_data
+                self.wfile.write('\tUploaded %s as "%s" (%d bytes)\n' % \
+                        (field, field_item.filename, file_len))
+            else:
+                cadena = str(form[field].value).decode('utf8').strip()
+                if len(cadena)>0:
+                    # Se recibió una cadena de texto
+                    salida = []
+                    s=-1
+                    message = cadena.encode('utf-8').split(". ")
+                    #for m in messageu.split(". "):
+                        #print m,salida,s,process
+                    process,salida,s = analyzer.sendLineToProcess(message,process,salida,s)
+                    salida = json.dumps( salida )
+                    self.wfile.write(salida)
+            break #sólo un campo field es aceptado
+        return
+
+#class GetHandler(BaseHTTPRequestHandler): 
     def do_GET(self):
         global iniciado, process, salida, s
+        form = cgi.FieldStorage(
+            fp=self.rfile, 
+            headers=self.headers,
+            environ={'REQUEST_METHOD':'POST',
+                     'CONTENT_TYPE':self.headers['Content-Type'],
+                     })
         parsed_path = urlparse.urlparse(self.path)
         message = parsed_path.query
         message = message.strip()
@@ -149,7 +202,7 @@ if __name__ == '__main__':
     print u"  >> Ingrese un comando de ejecución del tipo:"
     print u"  >>     analyzer.exe changapoeta -f analyzer.cfg"
 
-    server = HTTPServer(host_port, GetHandler)
+    server = HTTPServer(host_port, GetNPostHandler)
     do=True
     while do:
         print('-------------------------------------------')
