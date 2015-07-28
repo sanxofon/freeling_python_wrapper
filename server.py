@@ -107,12 +107,6 @@ class GetNPostHandler(BaseHTTPRequestHandler):
 #class GetHandler(BaseHTTPRequestHandler): 
     def do_GET(self):
         global iniciado, process, salida, s
-        form = cgi.FieldStorage(
-            fp=self.rfile, 
-            headers=self.headers,
-            environ={'REQUEST_METHOD':'POST',
-                     'CONTENT_TYPE':self.headers['Content-Type'],
-                     })
         parsed_path = urlparse.urlparse(self.path)
         message = parsed_path.query
         message = message.strip()
@@ -139,7 +133,7 @@ class GetNPostHandler(BaseHTTPRequestHandler):
                 print "  >> Analizar:",message
                 salida = []
                 s=-1
-                messageu = message.encode('utf-8').split(". ")
+                messageu = message.split(". ")
                 #for m in messageu.split(". "):
                     #print m,salida,s,process
                 process,salida,s = analyzer.sendLineToProcess(messageu,process,salida,s)
